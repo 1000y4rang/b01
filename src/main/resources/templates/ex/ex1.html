@@ -5,6 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-    <h1 th:text="${message}"></h1>
+<!--/* 인라인 방식 */-->
+  <h4>[[${list}]]</h4>
+  <hr/>
+<!--/* Thymeleaf 방식 */-->
+  <h4 th:text="${list}"></h4>
 </body>
 </html>
