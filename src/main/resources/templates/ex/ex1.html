@@ -6,9 +6,24 @@
 </head>
 <body>
 <!--/* 인라인 방식 */-->
-  <h4>[[${list}]]</h4>
-  <hr/>
+    <h4>[[${list}]]</h4>
+    <ul>
+        <!--/* 반복문 */-->
+        <th:block th:each="item : ${list}">
+            <li>[[${item}]]</li>
+        </th:block>
+    </ul>
+    <hr/>
 <!--/* Thymeleaf 방식 */-->
-  <h4 th:text="${list}"></h4>
+    <h4 th:text="${list}"></h4>
+    <ul>
+        <!--/* 반복문 */-->
+        <li th:each="str:${list}" th:text="${str}"></li>
+    </ul>
+    <hr/>
+<!--/*임시로 변수 선언*/-->
+<div th:with="num1=${10}, num2=${20}">
+    <h4 th:text="${num1+num2}"></h4>
+</div>
 </body>
 </html>

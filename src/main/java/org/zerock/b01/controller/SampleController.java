@@ -18,8 +18,9 @@ public class SampleController {
     }
 
     @GetMapping("/ex/ex1")
-    public void ex1(Model model) {
+    public void ex1(Model model) {        
         List<String> list = Arrays.asList("1", "2", "3");
         model.addAttribute("list", list);
+        log.info("model : " + model);
     }
 }
