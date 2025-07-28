@@ -4,8 +4,13 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.zerock.b01.domain.Board;
 
+import java.awt.print.Pageable;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 @SpringBootTest
@@ -28,4 +33,36 @@ public class BoardRepositoryTests {
             log.info("bno:"+result.getBno());
         });
     }
+
+    @Test
+    public void testSelect(){
+        Long bno = 100L;
+        // Optional<T> findById(ID id);
+        Optional<Board> result = boardRepository.findById(bno);
+        Board board = result.orElseThrow();
+        log.info(board);
+    }
+
+    @Test
+    public void testUpdate(){
+        Long bno = 100L;
+        // bno 100번 글 수정
+        Board board =  boardRepository.findById(bno).orElseThrow();
+        // 내용 수정
+        board.change("title...100", "content...100");
+        boardRepository.save(board);
+        log.info(board);
+    }
+
+    @Test
+    public void testDelete(){
+        Long bno = 1L;
+        boardRepository.deleteById(bno);
+    }
+
+    @Test
+    public void testPaging(){
+
+    }
+
 }
