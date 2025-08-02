@@ -27,7 +27,7 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-   git clone     return new ApiInfoBuilder()
+        return new ApiInfoBuilder()
                 .title("Boot 01 Project Swagger")
                 .build();
     }
