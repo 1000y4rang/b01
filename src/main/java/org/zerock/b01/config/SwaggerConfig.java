@@ -11,13 +11,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 public class SwaggerConfig {
 
-    /*@Bean
-    public OpenAPI openAPI() {
-        return new OpenAPI()
-                .components(new Components())
-                .info(apiInfo());
-    }*/
-
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
