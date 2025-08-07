@@ -66,7 +66,7 @@ public class BoardRepositoryTests {
         Pageable  pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
         Page<Board> result = boardRepository.findAll(pageable);
 
-        log.info("total count : "+result.getTotalElements());
+        log.info("total count : "+result.getSize());
         log.info("total pages : "+result.getTotalPages());
         log.info("page number : "+result.getNumber());
         log.info("page size : "+result.getSize());
@@ -74,6 +74,37 @@ public class BoardRepositoryTests {
         List<Board> todoList = result.getContent();
 
         todoList.forEach(board -> log.info(board));
+    }
+
+    @Test
+    public void testSearch1(){
+        Pageable  pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+        Page<Board> result = boardRepository.search1(pageable);
+
+        log.info("total count : "+result.getSize());
+        log.info("total pages : "+result.getTotalPages());
+        log.info("page number : "+result.getNumber());
+        log.info("page size : "+result.getSize());
+
+        List<Board> todoList = result.getContent();
+
+        todoList.forEach(board -> log.info(board));
+
+    }
+
+    @Test
+    public void testSearchAll(){
+        String[] types = {"t", "c", "w"};
+        String keyword = "1";
+        Pageable  pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+        Page<Board> result = boardRepository.searchAll(types, keyword, pageable);
+
+        log.info("total pages : "+result.getTotalPages());
+        log.info("size : "+result.getSize());
+        log.info("page number : "+result.getNumber());
+        log.info(result.hasPrevious());
+        log.info(result.hasNext());
+        result.getContent().forEach(board -> log.info(board));
     }
 
 }
