@@ -1,5 +1,6 @@
 package org.zerock.b01.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.zerock.b01.domain.Board;
 import org.zerock.b01.dto.BoardDTO;
 import org.zerock.b01.repository.BoardRepository;
+
+import java.util.Optional;
 
 @Service
 @Log4j2
@@ -21,5 +24,27 @@ public class BoardServiceImpl implements BoardService {
         Board board = modelMapper.map(boardDTO, Board.class);
         Long bno = boardRepository.save(board).getBno(); // 주의
         return bno;
+    }
+
+    @Override
+    public BoardDTO readOne(Long bno) {
+        Optional<Board> result = boardRepository.findById(bno);
+        Board board = result.orElseThrow();
+        BoardDTO boardDTO = modelMapper.map(board, BoardDTO.class);
+        return boardDTO;
+    }
+
+    @Override
+    public void modify(BoardDTO boardDTO) {
+        Optional<Board> result = boardRepository.findById(boardDTO.getBno());
+        Board board = result.orElseThrow();
+        // 수정 함수
+        board.change(boardDTO.getTitle(), boardDTO.getContent());
+        boardRepository.save(board);
+    }
+
+    @Override
+    public void delete(Long bno) {
+        boardRepository.deleteById(bno);
     }
 }

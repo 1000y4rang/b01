@@ -23,4 +23,21 @@ public class BoardServiceTests {
         Long bno = boardService.register(boardDTO);
         log.info(bno);
     }
+
+    @Test
+    public void testModify(){
+        BoardDTO boardDTO = BoardDTO.builder()
+                .bno(101L)
+                .title("신규 글")
+                .content("수정하다...")
+                .build();
+        boardService.modify(boardDTO);
+    }
+
+    @Test
+    public void testDelete(){
+        Long bno = 101L;
+        boardService.delete(bno);
+    }
+
 }
