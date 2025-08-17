@@ -1,6 +1,8 @@
 package org.zerock.b01.service;
 
 import org.zerock.b01.dto.BoardDTO;
+import org.zerock.b01.dto.PageRequestDTO;
+import org.zerock.b01.dto.PageResponseDTO;
 
 public interface BoardService {
     // 등록
@@ -14,4 +16,7 @@ public interface BoardService {
 
     // 삭제
     void delete(Long bno);
+
+    // 리스트
+    PageResponseDTO<BoardDTO> list(PageRequestDTO pageRequestDTO);
 }
