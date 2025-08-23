@@ -42,7 +42,7 @@ public class BoardServiceTests {
         boardService.delete(bno);
     }
 
-    /*@Test
+    @Test
     public void testList(){
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
                         .type("tcw")
@@ -53,6 +53,6 @@ public class BoardServiceTests {
 
         PageResponseDTO<BoardDTO> dtoList = boardService.list(pageRequestDTO);
         log.info(dtoList);
-    }*/
+    }
 
 }

@@ -17,6 +17,6 @@ public interface BoardService {
     // 삭제
     void delete(Long bno);
 
-    // 리스트
+    // 페이징 리스트
     PageResponseDTO<BoardDTO> list(PageRequestDTO pageRequestDTO);
 }
