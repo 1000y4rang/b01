@@ -29,7 +29,7 @@ public class BoardServiceTests {
     @Test
     public void testModify(){
         BoardDTO boardDTO = BoardDTO.builder()
-                .bno(101L)
+                .bno(100L)
                 .title("신규 글")
                 .content("수정하다...")
                 .build();
