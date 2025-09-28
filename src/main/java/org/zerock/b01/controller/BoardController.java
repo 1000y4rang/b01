@@ -21,11 +21,18 @@ public class BoardController {
                                                 // 생성자 public BoardController(BoardService boardService)를 주입받는다.
                                                 // 그래서 boardService.함수()를 바로 쓸 수 있나보다.
 
-    @GetMapping("/list")
+    /*@GetMapping("/list")
     public void list(PageRequestDTO pageRequestDTO, Model model){
         PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
         model.addAttribute("responseDTO", responseDTO);
+    }*/
+
+
+    @GetMapping("/list")
+    public void list(){
+        log.info("여기는 오는가?");
     }
+
 
 
 }

@@ -67,8 +67,8 @@ sourceSets{
         java{
             srcDirs = ["src/main/java", "build/generated"]
         }
-        resources{  // 기본 값이 깨져서 statics를 못읽어봄
+        /*resources{  // 기본 값이 깨져서 statics를 못읽어봄
             srcDirs = ["src/main/resources"]
-        }
+        }*/
     }
 }
