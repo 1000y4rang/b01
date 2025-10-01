@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.zerock.b01.domain.Board;
 
+// Querydsl
 public interface BoardSearch {
 
     // Board 테이블을 페이징으로 조회한다.
