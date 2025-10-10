@@ -39,7 +39,7 @@ public class PageResponseDTO<E> {
         this.end = (int)Math.ceil(this.page / 10.0) * 10; // 10
         this.start = this.end - 9; // 1
         int last = (int)Math.ceil(total/(double)size); // 총 192 게시글이면 20페이지가 나옴
-        this.end = end > last ? end : last;
+        this.end = (this.end < last) ? this.end : last;
         this.prev = this.start > 1;
         this.next = total > this.end * this.size; // 192 > 10 * 10
 
