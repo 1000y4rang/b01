@@ -27,9 +27,4 @@ public class BoardController {
         PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
         model.addAttribute("responseDTO", responseDTO);
     }
-
-
-
-
-
 }
