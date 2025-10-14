@@ -52,5 +52,11 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
+    // 조회
+    @GetMapping("/read")
+    public void readOne(Long bno, PageRequestDTO pageRequestDTO,  Model model){
+        BoardDTO boardDTO = boardService.readOne(bno);
+        model.addAttribute("dto", boardDTO);
+    }
 
 }

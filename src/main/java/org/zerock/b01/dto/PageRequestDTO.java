@@ -39,7 +39,9 @@ public class PageRequestDTO
             StringBuilder builder = new StringBuilder();
             builder.append("page="+ this.page);
             builder.append("&size=" + this.size);
+
             if(keyword!=null && !keyword.isEmpty()){
+                builder.append("&type=" + this.type);
                 builder.append("&keyword=" + keyword);
             }
             link = builder.toString();
