@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+
+            <div class="card">
+                <div class="card-header">
+                  Board Modify
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/board/modify}" method="post" id="frm1">
+                        <div class="form-group mb-3">
+                            <span class="input-group-text">Bno</span>
+                            <input type="text" class="form-control" name="bno" th:value="${dto.bno}" readonly/>
+                        </div>
+                        <div class="form-group mb-3">
+                            <span class="input-group-text">Title</span>
+                            <input type="text" class="form-control" name="title" th:value="${dto.title}" >
+                        </div>
+                        <div class="form-group mb-3">
+                            <span class="input-group-text">Content</span>
+                            <textarea class="form-control col-sm-5" name="content" rows="5" >
+                            [[${dto.content}]]
+                        </textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <span class="input-group-text">Writer</span>
+                            <input type="text" class="form-control" name="writer" th:value="${dto.writer}" readonly>
+                        </div>
+                        <div class="form-group mb-3">
+                            <span class="input-group-text">RegDate</span>
+                            <input type="text" class="form-control" th:value="${#temporals.format(dto.regDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
+                        </div>
+                        <div class="form-group mb-3">
+                            <span class="input-group-text">ModDate</span>
+                            <input type="text" class="form-control" th:value="${#temporals.format(dto.modDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
+                        </div>
+
+                    </form>
+
+                    <div class="my-4">
+                        <div class="float-end" th:with="link=${pageRequestDTO.getLink()}">
+                            <a th:href="|@{/board/list}?&${link}|" class="text-decoration-none">
+                                <button type="button" class="btn btn-primary listBtn">List</button>
+                            </a>
+                            <button type="button" class="btn btn-secondary modBtn">Modify</button>
+                            <button type="button" class="btn btn-danger removeBtn">Remove</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script layout:fragment="script" th:inline="javascript">
+    const urlLink = [[${link}]]; // 수정처리가 잘못되면 url의 link를 사용해서 list로 되될려준다.
+    const formObj = document.querySelector("#frm1");
+
+    document.querySelector(".modBtn").addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        formObj.action = `/board/modify?${urlLink}`;
+        formObj.method = "post";
+        formObj.submit();
+    }, false);
+
+    const errors = [[${errors}]];
+    console.log(errors);
+
+    let errorMsg = "";
+    if(errors && errors.length > 0) {
+        for(let error of errors) {
+            console.log(error);
+            errorMsg += `\n${error.field}(은)는 ${error.code}`;
+        }
+
+        // 현재 페이지의 히스토리 항목(=주소창의 URL 상태) 을 갱신하는 코드입니다.
+        // stateObj = {} → 새 상태를 빈 객체로 저장
+        // title = null → 타이틀은 변경하지 않음
+        // url = null → 현재 URL 유지 (즉, 주소는 바뀌지 않음)
+        // 현재 히스토리 상태를 덮어써서, 새로고침 시 오류 alert가 다시 안 뜨게 함
+        history.replaceState({}, null, null);
+        alert(errorMsg);
+    }
+
+</script>

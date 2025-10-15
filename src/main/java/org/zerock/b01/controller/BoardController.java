@@ -52,11 +52,31 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
-    // 조회
-    @GetMapping("/read")
+    // 조회화면, 수정화면
+    @GetMapping({"/read", "/modify"})
     public void readOne(Long bno, PageRequestDTO pageRequestDTO,  Model model){
         BoardDTO boardDTO = boardService.readOne(bno);
         model.addAttribute("dto", boardDTO);
     }
 
+    // 수정
+    @PostMapping("/modify")
+    public String modify(PageRequestDTO pageRequestDTO
+                    ,  @Valid BoardDTO boardDTO
+                    , BindingResult bindingResult
+                    , RedirectAttributes redirectAttributes){
+        // 유효성 검사 에러
+        if(bindingResult.hasErrors()){
+            String link = pageRequestDTO.getLink();
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            redirectAttributes.addAttribute("bno", boardDTO.getBno()); // 쿼리 파라미터로 데이터를 전달
+
+            return "redirect:/board/modify?"+link; // bno는 위 함수에서 전달 redirectAttributes.addAttribute("bno", boardDTO.getBno());
+        }
+        log.info(boardDTO);
+        boardService.modify(boardDTO);
+        redirectAttributes.addFlashAttribute("result", "modified"); // url에 안나오는 1회성
+        redirectAttributes.addAttribute("bno", boardDTO.getBno()); // 쿼리 파라미터로 데이터를 전달
+        return "redirect:/board/list";
+    }
 }
