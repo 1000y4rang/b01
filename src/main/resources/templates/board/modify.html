@@ -43,9 +43,7 @@
 
                     <div class="my-4">
                         <div class="float-end" th:with="link=${pageRequestDTO.getLink()}">
-                            <a th:href="|@{/board/list}?&${link}|" class="text-decoration-none">
-                                <button type="button" class="btn btn-primary listBtn">List</button>
-                            </a>
+                            <button type="button" class="btn btn-primary listBtn">List</button>
                             <button type="button" class="btn btn-secondary modBtn">Modify</button>
                             <button type="button" class="btn btn-danger removeBtn">Remove</button>
                         </div>
@@ -64,13 +62,31 @@
     document.querySelector(".modBtn").addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
+
         formObj.action = `/board/modify?${urlLink}`;
         formObj.method = "post";
         formObj.submit();
     }, false);
 
+    document.querySelector(".removeBtn").addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        formObj.action = `/board/delete`;
+        formObj.method = "post";
+        formObj.submit();
+    }, false);
+
+    document.querySelector(".listBtn").addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        formObj.reset();
+        self.location = `/board/list`;
+    }, false);
+
     const errors = [[${errors}]];
-    console.log(errors);
+    //console.log(errors);
 
     let errorMsg = "";
     if(errors && errors.length > 0) {

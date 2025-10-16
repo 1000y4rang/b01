@@ -79,4 +79,15 @@ public class BoardController {
         redirectAttributes.addAttribute("bno", boardDTO.getBno()); // 쿼리 파라미터로 데이터를 전달
         return "redirect:/board/list";
     }
+
+    // 삭제
+    @PostMapping("/delete")
+    public String delete(Long bno, String title, RedirectAttributes redirectAttributes){
+        log.info("bno = " + bno);
+        log.info("title = " + title);
+
+        boardService.delete(bno);
+        redirectAttributes.addFlashAttribute("result", "deleted");
+        return "redirect:/board/list";
+    }
 }
