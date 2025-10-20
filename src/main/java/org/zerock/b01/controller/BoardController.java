@@ -17,7 +17,7 @@ import org.zerock.b01.dto.PageResponseDTO;
 import org.zerock.b01.service.BoardService;
 
 
-@Controller
+@RestController
 @Log4j2
 @RequestMapping("/board")
 @RequiredArgsConstructor    // final 객체를 생성자에서 주입받음. @Autowired : 순환참조가 일어날 수 있기 때문
