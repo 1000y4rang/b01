@@ -12,18 +12,22 @@ import org.zerock.b01.domain.Reply;
 public class ReplyRepositoryTest {
     @Autowired
     ReplyRepository replyRepository;
+    @Autowired
+    BoardRepository boardRepository;
 
     @Test
     public void testInsert(){
         // 실제 있는 게시글
-        Long bno = 300L;
-        Board board = Board.builder().bno(bno).build();
-        Reply reply = Reply.builder().board(board)
+        Long bno = 200L;
+        Board board = boardRepository.findById(bno)
+                .orElseThrow(() -> new IllegalArgumentException("게시글 없음: " + bno));
+
+        Reply reply = Reply.builder()
+                .board(board)
                 .replyText("댓글테스트")
                 .replyer("정혜인")
                 .build();
 
-        // 게시글 100번에 댓글 저장
         replyRepository.save(reply);
     }
 }
