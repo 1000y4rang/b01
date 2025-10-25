@@ -37,7 +37,7 @@ public class BoardRepositoryTests {
 
     @Test
     public void testSelect(){
-        Long bno = 100L;
+        Long bno = 300L;
         // Optional<T> findById(ID id);
         Optional<Board> result = boardRepository.findById(bno);
         Board board = result.orElseThrow();
@@ -46,7 +46,7 @@ public class BoardRepositoryTests {
 
     @Test
     public void testUpdate(){
-        Long bno = 100L;
+        Long bno = 300L;
         // bno 100번 글 수정
         Board board =  boardRepository.findById(bno).orElseThrow();
         // 내용 수정
@@ -57,7 +57,7 @@ public class BoardRepositoryTests {
 
     @Test
     public void testDelete(){
-        Long bno = 1L;
+        Long bno = 301L;
         boardRepository.deleteById(bno);
     }
 
