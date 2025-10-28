@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name="Reply", indexes = {@Index(name = "idx_reply_board_bno", columnList = "board_bno")})
 @Getter
 @Builder
 @NoArgsConstructor

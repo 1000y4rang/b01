@@ -3,9 +3,12 @@ package org.zerock.b01.controller;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
+import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +28,12 @@ public class ReplyController {
             summary = "댓글 등록",
             description = "[POST]방식으로 댓글 등록"
     )
-    public ResponseEntity<Map<String, Long>> register(@RequestBody ReplyDTO replyDTO) {
+    public ResponseEntity<Map<String, Long>> register(@Valid @RequestBody ReplyDTO replyDTO
+                                                    , BindingResult bindingResult) throws BindException {
         // 넘어온 json 값
         log.info(replyDTO.toString());
+        // 에러처리
+        if(bindingResult.hasErrors()) {throw new BindException(bindingResult);}
         // 리턴 값
         Map<String, Long> reslultMap = Map.of("rno", 111l);
         // 상태 값 = 200 ok
