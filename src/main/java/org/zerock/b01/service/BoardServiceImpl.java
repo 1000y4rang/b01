@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.b01.domain.Board;
 import org.zerock.b01.dto.BoardDTO;
+import org.zerock.b01.dto.BoardListReplyCountDTO;
 import org.zerock.b01.dto.PageRequestDTO;
 import org.zerock.b01.dto.PageResponseDTO;
 import org.zerock.b01.repository.BoardRepository;
@@ -54,6 +55,21 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public PageResponseDTO<BoardListReplyCountDTO> listWithReplyCount(PageRequestDTO pageRequestDTO) {
+        String[] types = pageRequestDTO.getTypes();
+        String keyword = pageRequestDTO.getKeyword();
+        Pageable pageable = pageRequestDTO.getPageable("bno", "writer");  // Sort.by(props).descending()
+
+        Page<BoardListReplyCountDTO> result = boardRepository.searchWithReplyCount(types, keyword, pageable);
+
+        return PageResponseDTO.<BoardListReplyCountDTO>withAll()  // 생성자에 붙인 이름 호출
+                .pageRequestDTO(pageRequestDTO)   // 파라미터 주입 public PageResponseDTO(PageRequestDTO pageRequestDTO, List<Enum> dtoList, int total) {
+                .dtoList(result.getContent())        // List<t>를 불러오는 jpa 내장함수
+                .total((int)result.getTotalElements())
+                .build();
+    }
+
+    /*@Override
     public PageResponseDTO<BoardDTO> list(PageRequestDTO pageRequestDTO) {
         String[] types = pageRequestDTO.getTypes();
         String keyword = pageRequestDTO.getKeyword();
@@ -68,5 +84,5 @@ public class BoardServiceImpl implements BoardService {
                 .dtoList(dtoList)
                 .total((int)result.getTotalElements())
                 .build();
-    }
+    }*/
 }

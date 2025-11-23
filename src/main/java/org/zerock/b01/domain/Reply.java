@@ -16,7 +16,7 @@ public class Reply extends BaseEntity{
     private Long rno;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Board board;
+    private Board board;    // board_bno 자동생성;
 
     private String replyText;
 

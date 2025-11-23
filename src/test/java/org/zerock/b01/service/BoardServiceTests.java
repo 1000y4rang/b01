@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.zerock.b01.dto.BoardDTO;
+import org.zerock.b01.dto.BoardListReplyCountDTO;
 import org.zerock.b01.dto.PageRequestDTO;
 import org.zerock.b01.dto.PageResponseDTO;
 
@@ -51,7 +52,7 @@ public class BoardServiceTests {
                         .size(10)
                         .build();
 
-        PageResponseDTO<BoardDTO> dtoList = boardService.list(pageRequestDTO);
+        PageResponseDTO<BoardListReplyCountDTO> dtoList = boardService.listWithReplyCount(pageRequestDTO);
         log.info(dtoList);
     }
 
