@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +15,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.zerock.b01.dto.ReplyDTO;
+import org.zerock.b01.service.ReplyService;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @Log4j2
+@RequiredArgsConstructor // final과 세트 
 @RequestMapping("/replies")
 public class ReplyController {
+
+    private final ReplyService replyService;
 
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
@@ -34,8 +39,12 @@ public class ReplyController {
         log.info(replyDTO.toString());
         // 에러처리
         if(bindingResult.hasErrors()) {throw new BindException(bindingResult);}
+        // 답변 등록
+        Long rno = replyService.register(replyDTO);
         // 리턴 값
-        Map<String, Long> reslultMap = Map.of("rno", 111l);
+        Map<String, Long> reslultMap = new HashMap<>();
+        reslultMap.put("rno", rno);
+
         // 상태 값 = 200 ok
         return ResponseEntity.ok(reslultMap);
     }
