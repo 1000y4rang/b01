@@ -71,4 +71,30 @@ public class ReplyController {
         ReplyDTO replyDTO = replyService.read(rno);
         return replyDTO;
     }
+
+    // 댓글 삭제
+    @Operation(
+            summary = "댓글 삭제",
+            description = "[DELETE]방식으로 댓글 삭제")
+    @DeleteMapping("/{rno}")
+    public Map<String, Long> remove(@PathVariable("rno") Long rno){
+
+        replyService.remove(rno);
+
+        Map<String, Long> reslultMap = new HashMap<>();
+        reslultMap.put("rno", rno);
+        return reslultMap;
+    }
+
+    // 댓글 수정
+    @Operation(summary = "댓글 수정",
+            description = "[PUT]방식으로 댓글 수정")
+    @PutMapping(value = "/{rno}", consumes =  MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Long> modify(@PathVariable("rno") Long rno, @RequestBody ReplyDTO replyDTO){
+       replyDTO.setRno(rno);
+       replyService.modify(replyDTO);
+       Map<String, Long> reslultMap = new HashMap<>();
+       reslultMap.put("rno", rno);
+       return reslultMap;
+    }
 }

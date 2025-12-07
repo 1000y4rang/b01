@@ -13,7 +13,7 @@ public interface ReplyService {
     void modify(ReplyDTO dto);
 
     // 삭제
-    void remove(ReplyDTO dto);
+    void remove(Long rno);
 
     // 조회
     ReplyDTO read(Long rno);
