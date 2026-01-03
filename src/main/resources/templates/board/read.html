@@ -68,21 +68,71 @@
             </ul>
         </div>
     </div>
+    <!--입력용 댓글창(모달)-->
+    <div class="modal registerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Register Reply</h5>
+                    <!--x버튼-->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Reply Text</span>
+                        <input type="text" class="form-control replyText">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Replyer</span>
+                        <input type="text" class="form-control replyer">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary registerBtn">Register</button>
+                    <button class="btn btn-outline-dark closeRegisterBtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--수정/삭제용 댓글창(모달)-->
+    <div class="modal modifyModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title replyHeader">댓글 번호</h5>
+                    <!--x버튼-->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Reply Text</span>
+                        <input type="text" class="form-control modifyText">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-info modifyBtn">Modify</button>
+                    <button class="btn btn-danger removeBtn">Remove</button>
+                    <button class="btn btn-outline-dark closeModifyBtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/js/reply.js"></script>
 </div>
 
 <script layout:fragment="script" th:inline="javascript">
     const bno = [[${dto.bno}]];
-    const replyList =  document.querySelector(".replyList"); // 댓글 리스트 영역
-    const pageList =  document.querySelector(".replyPaging");  // 댓글 페이징 영역
+    const replyList = document.querySelector(".replyList"); // 댓글 리스트 영역
+    const pageList = document.querySelector(".replyPaging");  // 댓글 페이징 영역
 
     // 댓글 리스트 생성
-    function printList(dtoList){
+    function printList(dtoList) {
         let listStr = '';
 
-        if(dtoList && dtoList.length > 0){
-            for(const dto of dtoList){
+        if (dtoList && dtoList.length > 0) {
+            for (const dto of dtoList) {
                 listStr += `
                     <li class="list-group-item d-flex replyItem">
                         <span class="col-2">${dto.rno}</span>
@@ -97,28 +147,29 @@
     }
 
     // 댓글 페이징 생성
-    function printPages(data){
+    function printPages(data) {
         let pageStr = "";
+        console.log("페이징==");
+        console.log(data);
 
-        if(data.prev){
-            pageStr += `<li class="page-item"><a class="page-link" data-page="${data.start-1}">PREV</a></li>`;
+        if (data.prev) {
+            pageStr += `<li class="page-item"><a class="page-link" data-page="${data.start - 1}">PREV</a></li>`;
         }
 
-        for(let i = data.start; i < data.end; i++){
-            pageStr += `<li class="page-item ${i == data.page ? "active":""}"><a class="page-link" data-page="${i}">${i}</a></li>`;
+        for (let i = data.start; i <= data.end; i++) {
+            pageStr += `<li class="page-item ${i == data.page ? "active" : ""}"><a class="page-link" data-page="${i}">${i}</a></li>`;
         }
 
-        if(data.next){
-            pageStr += `<li class="page-item" data-page="${data.end+1}"><a>NEXT</a></li>`;
+        if (data.next) {
+            pageStr += `<li class="page-item"><a class="page-link" data-page="${data.end + 1}">NEXT</a></li>`;
         }
 
-        console.log(pageStr);
 
         pageList.innerHTML = pageStr;
     }
 
     // 댓글 조회
-    function printReplies(page, size, goLast){
+    function printReplies(page, size, goLast) {
         getList({bno, page, size, goLast})
             .then((data) => {
                 // 댓글 리스트 생성
@@ -126,7 +177,145 @@
                 // 댓글 페이징 생성
                 printPages(data);
             })
-            .catch((err) => {console.log(err)});
+            .catch((err) => {
+                console.log(err)
+            });
     }
+
     printReplies(1, 10, true);
+
+    // 입력 댓글창
+    const registerModal = new bootstrap.Modal(document.querySelector(".registerModal"));
+    const registerBtn = document.querySelector(".registerBtn");
+    const closeRegisterBtn = document.querySelector(".closeRegisterBtn");
+    const replyText = document.querySelector(".replyText");
+    const replyer = document.querySelector(".replyer");
+
+    // 댓글창 열기 이벤트
+    document.querySelector(".addReplyBtn").addEventListener("click", (e) => {
+        registerModal.show();
+    }, false)
+
+    // 댓글창 닫기 이벤트
+    closeRegisterBtn.addEventListener("click", (e) => {
+        registerModal.hide();
+    }, false)
+
+    // 댓글 저장 이벤트
+    registerBtn.addEventListener("click", (e) => {
+        const registerObj = {
+              bno : bno // 게시글번호
+            , replyText : replyText.value
+            , replyer : replyer.value
+        }
+
+        addReply(registerObj)
+            .then(data=>{
+                    alert(data.rno); // 댓글번호
+
+                    // 초기화
+                    registerModal.hide();
+                    replyText.value = "";
+                    replyer.value = "";
+                    // 댓글 재조회
+                    printReplies(1, 10, true);
+            })
+            .catch(err=>{
+                alert("Exception...");
+            })
+    })
+
+    // 전역 변수
+    let page = 1;
+    let size = 10;
+    // 댓글 페이지 조회 이벤트
+    pageList.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const target = e.target;
+        if(!target || target.tagName != "A"){
+            return;
+        }
+
+        const pageNum =  target.getAttribute("data-page");
+        page = pageNum;
+        printReplies(page, size);
+
+    }, false)
+
+    // 수정, 삭제 댓글창
+    const modifyModal = new bootstrap.Modal(document.querySelector(".modifyModal"));
+    const replyHeader = document.querySelector(".replyHeader");
+    const modifyText = document.querySelector(".modifyText");
+    const modifyBtn = document.querySelector(".modifyBtn");
+    const removeBtn = document.querySelector(".removeBtn");
+    const closeModifyBtn = document.querySelector(".closeModifyBtn");
+
+    //댓글 영역 클릭 및 조회
+    replyList.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const target = e.target;
+
+        // 댓글화면에서 data-rno 가져오기
+        if(!target || target.tagName != "SPAN"){
+            return;
+        }
+
+        const rno = target.getAttribute("data-rno");
+        if(!rno){return;}
+
+        getReply(rno).then((data)=>{
+            console.log(data);
+
+            // 수정 댓글창 조회
+            replyHeader.innerHTML = data.rno;
+            modifyText.value = data.replyText;
+            modifyModal.show();
+
+        }).catch(err=>{
+            alert("Exception...");
+        });
+
+    }, false);
+
+    // 댓글창 수정 이벤트
+    modifyBtn.addEventListener("click", (e) => {
+        const registerObj = {
+            bno : bno // 게시글번호
+            , rno : replyHeader.innerHTML // 댓글번호 조회때 저장해둠
+            , replyText : modifyText.value // 수정때는 id변경됨
+        }
+
+        modifyReply(registerObj).then((data)=>{
+            console.log(data);
+            alert(data.rno + " 댓글이 수정되었습니다.");
+            modifyText.value = "";
+            modifyModal.hide();
+            printReplies(page, size);
+        }).catch(err=>{
+            alert("Exception...");
+        })
+    }, false);
+
+    // 댓글창 삭제 이벤트
+    removeBtn.addEventListener("click", (e) => {
+        removeReply(replyHeader.innerHTML).then((data)=>{
+            alert(data.rno + " 댓글이 삭제되었습니다.");
+            modifyText.value = "";
+            modifyModal.hide();
+            page = 1;   // 1페이지로
+            printReplies(page, size);
+        }).catch(err=>{
+            alert("Exception...");
+        })
+    }, false);
+
+    // 댓글창 닫기 이벤트
+    closeModifyBtn.addEventListener("click", (e) => {
+        modifyModal.hide();
+    }, false)
+
 </script>
