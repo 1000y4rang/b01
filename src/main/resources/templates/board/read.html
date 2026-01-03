@@ -149,8 +149,7 @@
     // 댓글 페이징 생성
     function printPages(data) {
         let pageStr = "";
-        console.log("페이징==");
-        console.log(data);
+
 
         if (data.prev) {
             pageStr += `<li class="page-item"><a class="page-link" data-page="${data.start - 1}">PREV</a></li>`;
