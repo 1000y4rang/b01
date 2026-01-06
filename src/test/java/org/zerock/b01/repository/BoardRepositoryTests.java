@@ -8,11 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 import org.zerock.b01.domain.Board;
 import org.zerock.b01.dto.BoardListReplyCountDTO;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 @SpringBootTest
@@ -120,6 +122,35 @@ public class BoardRepositoryTests {
         log.info(result.hasPrevious() +": "+result.hasNext());
         result.getContent().forEach(board -> log.info(board));
 
+    }
+
+    @Test
+    public void testInsertWithImage()
+    {
+        Board board = Board.builder()
+                . title("title...")
+                .content("content...")
+                .writer("user" + (10%10))
+                .build();
+
+        // 이미지 3장의 데이터
+        for(int i = 0; i < 3; i++)
+        {
+            board.addImage(UUID.randomUUID().toString(), "file"+i+".jpg");
+        }
+
+        // board 저장
+        boardRepository.save(board);
+    }
+
+    @Test
+    public void testSelectWithImage()
+    {
+        log.info("========== board 조회 =============");
+        Board board = boardRepository.findById(1L).orElseThrow();
+        log.info(board);
+        log.info("============image 조회 ===========");
+        log.info(board.getImageSet());
     }
 
 }
