@@ -12,4 +12,6 @@ public interface ReplyRepository extends JpaRepository<Reply,Long> {
     // Reply가 속한 Board 엔티티의 bno 필드가 파라미터 :bno와 같은 데이터만 조회
     @Query("select r from Reply r where r.board.bno = :bno")
     Page<Reply> listOfBoard (Long bno, Pageable pageable);
+
+    void deleteByBoard_Bno(Long bno);
 }

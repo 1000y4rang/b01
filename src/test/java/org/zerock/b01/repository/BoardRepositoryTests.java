@@ -8,8 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.b01.domain.Board;
+import org.zerock.b01.domain.BoardImage;
 import org.zerock.b01.dto.BoardListReplyCountDTO;
 
 import java.util.List;
@@ -22,6 +24,9 @@ import java.util.stream.IntStream;
 public class BoardRepositoryTests {
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private ReplyRepository replyRepository;
 
     @Test
     public void testInsert(){
@@ -151,6 +156,54 @@ public class BoardRepositoryTests {
         log.info(board);
         log.info("============image 조회 ===========");
         log.info(board.getImageSet());
+    }
+
+    @Test
+    public void testReadWithImages()
+    {
+        log.info("========== board 조회 =============");
+        Board board = boardRepository.findByIdWithImages(1L).orElseThrow();
+        log.info(board);
+        log.info("============image 조회 ===========");
+        log.info(board.getImageSet());
+        for(BoardImage boardImage : board.getImageSet())
+        {
+            log.info(boardImage);
+        }
+    }
+
+    @Transactional
+    @Commit
+    @Test
+    public void testModifyImages()
+    {
+        log.info("========== board 조회 =============");
+        Board board = boardRepository.findByIdWithImages(2L).orElseThrow();
+        log.info(board);
+
+        log.info("========== 기존 첨부파일 삭제 =============");
+        board.clearImage();
+
+        log.info("========== 새 첨부파일 추가 =============");
+        for(int i = 0; i < 2; i++)
+        {
+            board.addImage(UUID.randomUUID().toString(), "updatefile"+i+".jpg");
+        }
+        boardRepository.save(board);
+    }
+
+    @Test
+    @Commit
+    @Transactional
+    public void deleteBoardAndReply()
+    {
+        Long bno = 2l;
+        // 댓글부터 지우고
+        replyRepository.deleteByBoard_Bno(bno);
+        // 게시글 삭제
+        boardRepository.deleteById(bno);
+
+
     }
 
 }
