@@ -206,4 +206,37 @@ public class BoardRepositoryTests {
 
     }
 
+
+    @Test
+    public void testInsertWithImageMany()
+    {
+        for(int i = 1; i <= 30; i++){
+
+            Board board = Board.builder()
+                    . title("title...")
+                    .content("content...")
+                    .writer("user" + (10%10))
+                    .build();
+
+            // 이미지 3장의 데이터
+            for(int j = 1; j < 4; j++)
+            {
+                if(i%5==0) continue;
+                board.addImage(UUID.randomUUID().toString(), "file"+j+".jpg");
+            }
+
+            // board 저장
+            boardRepository.save(board);
+        }
+    }
+
+    @Test
+    @Transactional
+    public void testSearchAllTables(){
+
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+        boardRepository.searchAllTables(null, null, pageable);
+    }
+
+
 }

@@ -15,4 +15,7 @@ public interface BoardSearch {
 
     // Board 테이블 목록 조회  + 댓글 갯수 조회
     Page<BoardListReplyCountDTO>  searchWithReplyCount(String[] types, String keyword, Pageable pageable);
+
+    // board(+board_image) + reply
+    Page<BoardListReplyCountDTO> searchAllTables(String[] types, String keyword, Pageable pageable);
 }
