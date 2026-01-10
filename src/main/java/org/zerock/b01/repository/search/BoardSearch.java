@@ -3,6 +3,7 @@ package org.zerock.b01.repository.search;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.zerock.b01.domain.Board;
+import org.zerock.b01.dto.BoardListAllDTO;
 import org.zerock.b01.dto.BoardListReplyCountDTO;
 
 // Querydsl
@@ -17,5 +18,8 @@ public interface BoardSearch {
     Page<BoardListReplyCountDTO>  searchWithReplyCount(String[] types, String keyword, Pageable pageable);
 
     // board(+board_image) + reply
-    Page<BoardListReplyCountDTO> searchAllTables(String[] types, String keyword, Pageable pageable);
+    Page<BoardListAllDTO> searchAllTables(String[] types, String keyword, Pageable pageable);
+
+
+
 }
