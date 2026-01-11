@@ -1,5 +1,6 @@
 package org.zerock.b01.repository;
 
+import groovyjarjarasm.asm.tree.LabelNode;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,11 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.b01.domain.Board;
 import org.zerock.b01.domain.BoardImage;
+import org.zerock.b01.dto.BoardDTO;
 import org.zerock.b01.dto.BoardListReplyCountDTO;
+import org.zerock.b01.service.BoardService;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,6 +31,8 @@ public class BoardRepositoryTests {
 
     @Autowired
     private ReplyRepository replyRepository;
+    @Autowired
+    private BoardService boardService;
 
     @Test
     public void testInsert(){
@@ -238,5 +244,38 @@ public class BoardRepositoryTests {
         boardRepository.searchAllTables(null, null, pageable);
     }
 
+    @Test
+    public void tesetRegisterWithImages (){
 
+        log.info(boardService.getClass().getName());
+
+        BoardDTO boardDTO = BoardDTO.builder()
+                .title("file...sample.. title..")
+                .content("sample content...")
+                .writer("1000y4rang")
+                .build();
+
+        boardDTO.setFileNames(
+                Arrays.asList(
+                        UUID.randomUUID() + "_aaa.jpg",
+                        UUID.randomUUID() + "_bbb.jpg",
+                        UUID.randomUUID() + "_ccc.jpg"
+                )
+        );
+
+        Long bno = boardService.register(boardDTO);
+        log.info("bno : "+bno);
+    }
+
+    @Test
+    public void testReadAll()
+    {
+        Long bno = 33l;
+        BoardDTO boardDTO = boardService.readOne(bno);
+        log.info(boardDTO);
+
+        for(String fileName : boardDTO.getFileNames()){
+            log.info(fileName);
+        }
+    }
 }
