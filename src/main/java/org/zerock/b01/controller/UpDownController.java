@@ -93,7 +93,7 @@ public class UpDownController {
     }
 
     @Operation(summary = "파일 삭제", description = "[DELETE]방식으로 파일 삭제")
-    @DeleteMapping(value = "/view/{fileName}")
+    @DeleteMapping(value = "/remove/{fileName}")
     public Map<String, Boolean> removeFile(@PathVariable String fileName)
     {
         Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
