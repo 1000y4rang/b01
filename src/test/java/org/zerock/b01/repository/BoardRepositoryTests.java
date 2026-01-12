@@ -13,8 +13,7 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.b01.domain.Board;
 import org.zerock.b01.domain.BoardImage;
-import org.zerock.b01.dto.BoardDTO;
-import org.zerock.b01.dto.BoardListReplyCountDTO;
+import org.zerock.b01.dto.*;
 import org.zerock.b01.service.BoardService;
 
 import java.util.Arrays;
@@ -69,9 +68,11 @@ public class BoardRepositoryTests {
         log.info(board);
     }
 
+
+
     @Test
     public void testDelete(){
-        Long bno = 100L;
+        Long bno = 99L;
         boardRepository.deleteById(bno);
     }
 
@@ -278,4 +279,56 @@ public class BoardRepositoryTests {
             log.info(fileName);
         }
     }
+
+    @Test
+    public void testModify(){
+        Long bno = 32L;
+        // bno 100번 글 수정
+        BoardDTO dto =  BoardDTO.builder()
+                .bno(bno)
+                .title("title...111")
+                .content("content...111")
+                .build();
+
+        // 이미지
+        dto.setFileNames(
+                Arrays.asList(UUID.randomUUID()+"_111.jpg")
+        );
+
+        boardService.modify(dto);
+        log.info(dto);
+    }
+
+    @Test
+    public void testDeleteAll(){
+        Long bno = 33L;
+        boardService.delete(bno);
+    }
+
+    @Test
+    public void tsetListWithAll()
+    {
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(1)
+                .size(10)
+                .build();
+
+        PageResponseDTO<BoardListAllDTO> responseDTO = boardService.listWithAll(pageRequestDTO);
+
+        List<BoardListAllDTO> dtoList = responseDTO.getDtoList();
+
+        dtoList.forEach(dto -> {
+            log.info(dto.getBno() +":"+dto.getTitle());
+
+            if(dto.getImageList() != null)
+            {
+                for(BoardImageDTO image : dto.getImageList()){
+                    log.info(image);
+                }
+            }
+
+            log.info("========================");
+        });
+    }
+
 }

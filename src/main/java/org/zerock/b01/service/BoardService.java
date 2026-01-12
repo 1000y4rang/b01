@@ -1,10 +1,7 @@
 package org.zerock.b01.service;
 
 import org.zerock.b01.domain.Board;
-import org.zerock.b01.dto.BoardDTO;
-import org.zerock.b01.dto.BoardListReplyCountDTO;
-import org.zerock.b01.dto.PageRequestDTO;
-import org.zerock.b01.dto.PageResponseDTO;
+import org.zerock.b01.dto.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +24,9 @@ public interface BoardService {
 
     // 리스트 + 댓글 카운트
     PageResponseDTO<BoardListReplyCountDTO> listWithReplyCount(PageRequestDTO pageRequestDTO);
+
+    // 리스트 + 이미지 + 댓글카운트
+    PageResponseDTO<BoardListAllDTO> listWithAll(PageRequestDTO pageRequestDTO);
 
     // dto를 엔터티로 전환 메서드
     default Board dtoToEntity(BoardDTO boardDTO)
